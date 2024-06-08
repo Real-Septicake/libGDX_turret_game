@@ -39,7 +39,7 @@ public final class TurretUtils {
 
     private static final ComponentMapper<EnemyComponent> enemyM = ComponentMapper.getFor(EnemyComponent.class);
 
-    private static final Family ENEMY = Family.all(EnemyComponent.class).exclude(EnemyComponent.class).get();
+    private static final Family ENEMY = Family.all(EnemyComponent.class).exclude(EnemyDisposeComponent.class).get();
 
     public static void damage(Entity target, float damage) {
         if(!ENEMY.matches(target))
