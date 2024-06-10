@@ -2,10 +2,9 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.*;
-import com.mygdx.game.factories.turrets.Act;
+import com.mygdx.game.factories.enemies.EnemyRoot;
+import com.mygdx.game.factories.turrets.TurretRoot;
 
 public class World {
     public static int money;
@@ -20,18 +19,16 @@ public class World {
         this.engine = engine;
     }
 
-    public Entity createTurret(Act act, TextureRegion initGun, Texture base,
-                               float originX, float originY, float x, float y,
-                               float centerX, float centerY, float range, float damage) {
+    public void createTurret(TurretRoot turret, float x, float y) {
         Entity e = engine.createEntity();
 
         TurretTextureComponent tex = engine.createComponent(TurretTextureComponent.class);
-        tex.turretGun = initGun;
-        tex.turretBase = base;
-        tex.originX = originX;
-        tex.originY = originY;
-        tex.centerX = centerX;
-        tex.centerY = centerY;
+        tex.turretGun = turret.initTex();
+        tex.turretBase = turret.base();
+        tex.originX = turret.originX();
+        tex.originY = turret.originY();
+        tex.centerX = turret.centerX();
+        tex.centerY = turret.centerY();
         e.add(tex);
 
         TransformComponent trans = engine.createComponent(TransformComponent.class);
@@ -42,39 +39,39 @@ public class World {
         RectBoundsComponent bounds = engine.createComponent(RectBoundsComponent.class);
         bounds.bounds.x = x;
         bounds.bounds.y = y;
-        bounds.bounds.width = base.getWidth();
-        bounds.bounds.height = base.getHeight();
+        bounds.bounds.width = turret.base().getWidth();
+        bounds.bounds.height = turret.base().getHeight();
         e.add(bounds);
 
-        TurretComponent turret = engine.createComponent(TurretComponent.class);
-        turret.range = range;
-        turret.damage = damage;
-        turret.act = act;
-        e.add(turret);
+        TurretComponent t = engine.createComponent(TurretComponent.class);
+        t.range = turret.range();
+        t.damage = turret.damage();
+        t.act = turret.act();
+        e.add(t);
 
         e.add(engine.createComponent(BuyingComponent.class));
         e.add(engine.createComponent(StateComponent.class));
 
-        return e;
+        engine.addEntity(e);
     }
 
-    public Entity createEnemy(Texture texture, float originX, float originY, float speed, int maxHealth, int value) {
-        Entity e = new Entity();
+    public void createEnemy(EnemyRoot enemy) {
+        Entity e = engine.createEntity();
 
-        EnemyTextureComponent textureComp = new EnemyTextureComponent();
-        textureComp.texture = texture;
-        textureComp.originX = originX;
-        textureComp.originY = originY;
+        EnemyTextureComponent textureComp = engine.createComponent(EnemyTextureComponent.class);
+        textureComp.texture = enemy.texture();
+        textureComp.originX = enemy.originX();
+        textureComp.originY = enemy.originY();
         e.add(textureComp);
 
-        EnemyComponent enemyComp = new EnemyComponent();
-        enemyComp.speed = speed;
-        enemyComp.maxHealth = maxHealth;
-        enemyComp.health = maxHealth;
-        enemyComp.value = value;
+        EnemyComponent enemyComp = engine.createComponent(EnemyComponent.class);
+        enemyComp.speed = enemy.speed();
+        enemyComp.maxHealth = enemy.maxHealth();
+        enemyComp.health = enemy.maxHealth();
+        enemyComp.value = enemy.value();
         e.add(enemyComp);
 
-        e.add(new TransformComponent());
-        return e;
+        e.add(engine.createComponent(TransformComponent.class));
+        engine.addEntity(e);
     }
 }

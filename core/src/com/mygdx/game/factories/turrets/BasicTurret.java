@@ -6,28 +6,32 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.StateComponent;
 
 public class BasicTurret extends TurretRoot {
-    public static final Texture TURRET_ASSETS = new Texture("TurretBasic.png");
+    private static final Texture TURRET_ASSETS = new Texture("TurretBasic.png");
 
-    public static final TextureRegion TURRET_STATIC = new TextureRegion(TURRET_ASSETS, 104, 64);
-    public static final TextureRegion TURRET_FIRE = new TextureRegion(TURRET_ASSETS, 0, 64, 134, 64);
-    public static final Texture BASE = new Texture("BasicBase.png");
+    private static final TextureRegion TURRET_STATIC = new TextureRegion(TURRET_ASSETS, 104, 64);
+    private static final TextureRegion TURRET_FIRE = new TextureRegion(TURRET_ASSETS, 0, 64, 134, 64);
+    private static final Texture BASE = new Texture("BasicBase.png");
 
-    public static final float CENTER_X = 40f, CENTER_Y = 40f;
+    private static final float CENTER_X = 40f, CENTER_Y = 40f;
 
-    public static final float STATIC_ORIGIN_X = 32, STATIC_ORIGIN_Y = 32;
-    public static final float FIRE_ORIGIN_X = 40, FIRE_ORIGIN_Y = 32;
+    private static final float STATIC_ORIGIN_X = 32, STATIC_ORIGIN_Y = 32;
+    private static final float FIRE_ORIGIN_X = 40, FIRE_ORIGIN_Y = 32;
 
-    public static final float RANGE = 200;
-    public static final float DAMAGE = 3;
+    private static final float RANGE = 200;
+    private static final float DAMAGE = 3;
 
-    public static final int READY = 0,
+    private static final int READY = 0,
                             ANIM  = 1,
                             WAIT  = 2;
 
-    public static final float ANIMATION = 0.1f,
+    private static final float ANIMATION = 0.1f,
                             DELAY = 0.9f;
 
-    protected static void act(Entity entity, Entity target, float delta) {
+    public static final BasicTurret INSTANCE = new BasicTurret();
+
+    private BasicTurret() {}
+
+    private static void act(Entity entity, Entity target, float delta) {
         StateComponent state = stateM.get(entity);
         switch(state.get()) {
             case READY -> {
@@ -52,8 +56,48 @@ public class BasicTurret extends TurretRoot {
 
     }
 
-    public static Entity create(float x, float y) {
-        return create(BasicTurret::act, TURRET_STATIC, BASE, STATIC_ORIGIN_X,
-                STATIC_ORIGIN_Y, x, y, CENTER_X, CENTER_Y, RANGE, DAMAGE);
+    @Override
+    public Act act() {
+        return BasicTurret::act;
+    }
+
+    @Override
+    public TextureRegion initTex() {
+        return TURRET_STATIC;
+    }
+
+    @Override
+    public Texture base() {
+        return BASE;
+    }
+
+    @Override
+    public float originX() {
+        return STATIC_ORIGIN_X;
+    }
+
+    @Override
+    public float originY() {
+        return STATIC_ORIGIN_Y;
+    }
+
+    @Override
+    public float centerX() {
+        return CENTER_X;
+    }
+
+    @Override
+    public float centerY() {
+        return CENTER_Y;
+    }
+
+    @Override
+    public float range() {
+        return RANGE;
+    }
+
+    @Override
+    public float damage() {
+        return DAMAGE;
     }
 }

@@ -24,13 +24,17 @@ public class GameScreen extends ScreenAdapter {
 
 	private final Family buyingFamily = Family.all(BuyingComponent.class).get();
 
-	public final Engine engine = new Engine();
+	public final PooledEngine engine = new PooledEngine();
+
+	public World world;
 
 	public GameScreen() {
 		Gdx.input.setInputProcessor(new InputProcessing());
 
 		map = new Texture("Map.png");
 		batch = new SpriteBatch();
+
+		world = new World(engine);
 
 		// Add systems
 		engine.addSystem(new StateSystem());
@@ -58,11 +62,11 @@ public class GameScreen extends ScreenAdapter {
 		@Override
 		public boolean keyDown(int keycode) {
 			if(keycode == Input.Keys.SPACE && engine.getEntitiesFor(buyingFamily).size() == 0){
-				engine.addEntity(BasicTurret.create(0, 0));
+				world.createTurret(BasicTurret.INSTANCE, 0, 0);
 				return true;
 			}
 			if(keycode == Input.Keys.E){
-				engine.addEntity(BasicEnemy.create());
+				world.createEnemy(BasicEnemy.INSTANCE);
 				return true;
 			}
 			return false;
