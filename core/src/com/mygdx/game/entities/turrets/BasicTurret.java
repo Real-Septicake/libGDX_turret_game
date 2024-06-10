@@ -1,4 +1,4 @@
-package com.mygdx.game.factories.turrets;
+package com.mygdx.game.entities.turrets;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +19,7 @@ public class BasicTurret extends TurretRoot {
 
     private static final float RANGE = 200;
     private static final float DAMAGE = 3;
+    private static final int COST = 200;
 
     private static final int READY = 0,
                             ANIM  = 1,
@@ -53,7 +54,6 @@ public class BasicTurret extends TurretRoot {
                     state.set(READY);
             }
         }
-
     }
 
     @Override
@@ -99,5 +99,10 @@ public class BasicTurret extends TurretRoot {
     @Override
     public float damage() {
         return DAMAGE;
+    }
+
+    @Override
+    public int cost() {
+        return COST;
     }
 }

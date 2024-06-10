@@ -1,4 +1,4 @@
-package com.mygdx.game.factories.turrets;
+package com.mygdx.game.entities.turrets;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,4 +17,6 @@ public abstract class TurretRoot {
     public abstract float centerY();
     public abstract float range();
     public abstract float damage();
+
+    public abstract int cost();
 }

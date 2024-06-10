@@ -3,8 +3,8 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.mygdx.game.components.*;
-import com.mygdx.game.factories.enemies.EnemyRoot;
-import com.mygdx.game.factories.turrets.TurretRoot;
+import com.mygdx.game.entities.enemies.EnemyRoot;
+import com.mygdx.game.entities.turrets.TurretRoot;
 
 public class World {
     public static int money;

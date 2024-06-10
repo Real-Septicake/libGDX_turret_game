@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.components.BuyingComponent;
-import com.mygdx.game.factories.enemies.BasicEnemy;
+import com.mygdx.game.entities.enemies.BasicEnemy;
 import com.mygdx.game.systems.*;
-import com.mygdx.game.factories.turrets.BasicTurret;
+import com.mygdx.game.entities.turrets.BasicTurret;
 
 
 public class GameScreen extends ScreenAdapter {

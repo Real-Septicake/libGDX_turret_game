@@ -1,4 +1,4 @@
-package com.mygdx.game.factories.enemies;
+package com.mygdx.game.entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 

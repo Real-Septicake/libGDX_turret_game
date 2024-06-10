@@ -1,4 +1,4 @@
-package com.mygdx.game.factories.turrets;
+package com.mygdx.game.entities.turrets;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
