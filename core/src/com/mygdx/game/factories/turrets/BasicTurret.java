@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.StateComponent;
 
-public class BasicTurret extends TurretFactory {
+public class BasicTurret extends TurretRoot {
     public static final Texture TURRET_ASSETS = new Texture("TurretBasic.png");
 
     public static final TextureRegion TURRET_STATIC = new TextureRegion(TURRET_ASSETS, 104, 64);

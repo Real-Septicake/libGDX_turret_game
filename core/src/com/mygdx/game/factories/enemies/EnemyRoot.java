@@ -6,7 +6,7 @@ import com.mygdx.game.components.EnemyComponent;
 import com.mygdx.game.components.EnemyTextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
-public class EnemyFactory {
+public class EnemyRoot {
 
     protected static Entity create(Texture texture, float originX, float originY, float speed, int maxHealth, int value) {
         Entity e = new Entity();

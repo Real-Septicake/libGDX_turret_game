@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.*;
 
-public class TurretFactory {
+public abstract class TurretRoot {
     protected static final ComponentMapper<StateComponent> stateM = ComponentMapper.getFor(StateComponent.class);
 
     protected static Entity create(Act act, TextureRegion initGun, Texture base,

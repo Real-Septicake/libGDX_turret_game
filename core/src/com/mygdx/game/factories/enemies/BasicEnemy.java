@@ -3,7 +3,7 @@ package com.mygdx.game.factories.enemies;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Texture;
 
-public class BasicEnemy extends EnemyFactory {
+public class BasicEnemy extends EnemyRoot {
     public static final Texture TEXTURE = new Texture("BasicEnemy.png");
     public static final float ORIGIN_X = 24, ORIGIN_Y = 24;
     public static final float SPEED = 300f;
