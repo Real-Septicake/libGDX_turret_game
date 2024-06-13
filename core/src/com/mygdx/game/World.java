@@ -9,12 +9,14 @@ import com.mygdx.game.entities.turrets.TurretRoot;
 public class World {
     public static int money;
     public static int lives;
+    public static int round;
 
     private final PooledEngine engine;
 
     public World(PooledEngine engine) {
         money = 500;
         lives = 100;
+        round = 0;
 
         this.engine = engine;
     }
@@ -47,6 +49,7 @@ public class World {
         t.range = turret.range();
         t.damage = turret.damage();
         t.act = turret.act();
+        t.type = turret;
         e.add(t);
 
         e.add(engine.createComponent(BuyingComponent.class));
@@ -65,6 +68,7 @@ public class World {
         e.add(textureComp);
 
         EnemyComponent enemyComp = engine.createComponent(EnemyComponent.class);
+        enemyComp.current = 0.0f;
         enemyComp.speed = enemy.speed();
         enemyComp.maxHealth = enemy.maxHealth();
         enemyComp.health = enemy.maxHealth();

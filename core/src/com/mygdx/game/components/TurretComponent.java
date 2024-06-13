@@ -2,6 +2,7 @@ package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
 import com.mygdx.game.entities.turrets.Act;
+import com.mygdx.game.entities.turrets.TurretRoot;
 
 public class TurretComponent implements Component {
     public static final int FIRST = 0;
@@ -16,4 +17,6 @@ public class TurretComponent implements Component {
     public Act act;
 
     public int value;
+
+    public TurretRoot type;
 }

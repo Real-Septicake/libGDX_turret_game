@@ -39,11 +39,14 @@ public final class TurretUtils {
 
     private static final ComponentMapper<EnemyComponent> enemyM = ComponentMapper.getFor(EnemyComponent.class);
 
-    private static final Family ENEMY = Family.all(EnemyComponent.class).exclude(EnemyDisposeComponent.class).get();
+    private static final Family ENEMY = Family.all(EnemyComponent.class).get();
+    private static final ComponentMapper<EnemyDisposeComponent> disposeM = ComponentMapper.getFor(EnemyDisposeComponent.class);
 
     public static void damage(Entity target, float damage) {
         if(!ENEMY.matches(target))
             throw new IllegalArgumentException("Cannot damage a non-enemy entity.");
+        if(disposeM.has(target))
+            return;
 
         EnemyComponent enemy = enemyM.get(target);
 

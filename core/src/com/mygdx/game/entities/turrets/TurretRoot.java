@@ -19,4 +19,5 @@ public abstract class TurretRoot {
     public abstract float damage();
 
     public abstract int cost();
+    public abstract String name();
 }

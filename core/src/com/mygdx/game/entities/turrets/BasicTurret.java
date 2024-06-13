@@ -21,6 +21,9 @@ public class BasicTurret extends TurretRoot {
     private static final float DAMAGE = 3;
     private static final int COST = 200;
 
+    private static final String NAME = "Basic Turret";
+
+    // Default delay values
     private static final int READY = 0,
                             ANIM  = 1,
                             WAIT  = 2;
@@ -104,5 +107,10 @@ public class BasicTurret extends TurretRoot {
     @Override
     public int cost() {
         return COST;
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }
