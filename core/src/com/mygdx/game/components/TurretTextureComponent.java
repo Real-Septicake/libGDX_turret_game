@@ -8,5 +8,4 @@ public class TurretTextureComponent implements Component {
     public TextureRegion turretGun = null;
     public Texture turretBase = null;
     public float originX = 0, originY = 0;
-    public float centerX = 0, centerY = 0;
 }

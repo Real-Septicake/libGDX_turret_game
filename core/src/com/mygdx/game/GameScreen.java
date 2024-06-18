@@ -43,6 +43,7 @@ public class GameScreen extends ScreenAdapter {
 		batch = new SpriteBatch();
 
 		world = new World(engine);
+		Shop.setWorld(world);
 
 		font = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
 
@@ -103,6 +104,8 @@ public class GameScreen extends ScreenAdapter {
 			Vector3 touch = new Vector3(screenX, screenY, 0);
 			camera.unproject(touch);
 
+			System.out.println(touch.x + ":" + touch.y);
+
 			if(Shop.handleClick(touch.x, touch.y))
 				return true;
 
@@ -114,6 +117,7 @@ public class GameScreen extends ScreenAdapter {
 					turret.remove(BuyingComponent.class);
 					return true;
 				}
+				return false;
 			}
 
 			ImmutableArray<Entity> turrets = engine.getEntitiesFor(turretFamily);

@@ -93,11 +93,11 @@ public class TurretRenderingSystem extends IteratingSystem {
         BuyingComponent buy = buyingM.get(entity);
 
         BaseQueueObject base = new BaseQueueObject(texture.turretBase,
-                trans.pos.x /*+ texture.originX - (float) texture.turretBase.getWidth() / 2*/,
-                trans.pos.y /*+ texture.originY - (float) texture.turretBase.getHeight() / 2*/,
+                trans.pos.x - texture.turretBase.getWidth() / 2f,
+                trans.pos.y - texture.turretBase.getHeight() / 2f,
                 buy == null || buy.canPlace);
         GunQueueObject gun = new GunQueueObject(texture.turretGun,
-                trans.pos.x + texture.turretBase.getWidth() / 2f - texture.originX, trans.pos.y + texture.turretBase.getHeight() / 2f - texture.originY,
+                trans.pos.x - texture.originX, trans.pos.y - texture.originY,
                 texture.originX, texture.originY,
                 texture.turretGun.getRegionWidth(),
                 texture.turretGun.getRegionHeight(),

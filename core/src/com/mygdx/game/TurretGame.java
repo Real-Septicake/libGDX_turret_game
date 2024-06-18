@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.entities.turrets.TurretRoot;
 
 public class TurretGame extends Game {
     public static final float WIDTH = 1280, HEIGHT = 800;
@@ -22,11 +23,13 @@ public class TurretGame extends Game {
             spline.valueAt(points[i], ((float)i)/((float)resolution-1));
         }
 
-        setScreen(new GameScreen());
-    }
+        // Load and cache the turret classes
+        try {
+            TurretRoot.loadClasses();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
-    @Override
-    public void render() {
-        super.render();
+        setScreen(new GameScreen());
     }
 }

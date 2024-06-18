@@ -29,8 +29,6 @@ public class World {
         tex.turretBase = turret.base();
         tex.originX = turret.originX();
         tex.originY = turret.originY();
-        tex.centerX = turret.centerX();
-        tex.centerY = turret.centerY();
         e.add(tex);
 
         TransformComponent trans = engine.createComponent(TransformComponent.class);

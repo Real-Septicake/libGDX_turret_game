@@ -20,7 +20,6 @@ public class TurretSystem extends IteratingSystem {
 
     private static final ComponentMapper<TransformComponent> transM = ComponentMapper.getFor(TransformComponent.class);
 
-    private static final ComponentMapper<TurretTextureComponent> turretTexM = ComponentMapper.getFor(TurretTextureComponent.class);
     private static final ComponentMapper<TurretComponent> turretM = ComponentMapper.getFor(TurretComponent.class);
     private static final ComponentMapper<BuyingComponent> buyingM = ComponentMapper.getFor(BuyingComponent.class);
     private static final ComponentMapper<RectBoundsComponent> boundsM = ComponentMapper.getFor(RectBoundsComponent.class);
@@ -50,8 +49,7 @@ public class TurretSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         if(isBuying(entity)) {
             cam.unproject(touch.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-            TurretTextureComponent tex = turretTexM.get(entity);
-            setLocation(entity, touch.x - tex.centerX, touch.y - tex.centerY);
+            setLocation(entity, touch.x, touch.y);
         } else {
             Entity target = target(entity);
             TurretComponent turret = turretM.get(entity);
@@ -61,13 +59,12 @@ public class TurretSystem extends IteratingSystem {
 
     public static void setLocation(Entity entity, float x, float y) {
         TransformComponent trans = transM.get(entity);
-
         trans.pos.x = x;
         trans.pos.y = y;
 
         RectBoundsComponent b = boundsM.get(entity);
-        b.bounds.x = x;
-        b.bounds.y = y;
+        b.bounds.x = trans.pos.x - b.bounds.width / 2f;
+        b.bounds.y = trans.pos.y - b.bounds.height / 2f;
     }
 
     public Entity target(Entity entity) {
@@ -159,14 +156,13 @@ public class TurretSystem extends IteratingSystem {
 
         // Check if too close to path
         TransformComponent trans = transM.get(entity);
-        TurretTextureComponent tex = turretTexM.get(entity);
-        close.x = trans.pos.x + tex.originX;
-        close.y = trans.pos.y + tex.originY;
+        close.x = trans.pos.x;
+        close.y = trans.pos.y;
         int max = (int) (TurretGame.spline.approximate(close) * TurretGame.resolution);
         if(max == 0)
             return false;
         for(int i = 0; i < TurretGame.points.length; i++) {
-            if(overlap(TurretGame.points[i], 50, bound.bounds, close.x, close.y))
+            if(overlap(TurretGame.points[i], 50, bound.bounds, trans.pos.x, trans.pos.y))
                 return false;
         }
 

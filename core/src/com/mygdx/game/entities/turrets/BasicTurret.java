@@ -12,8 +12,6 @@ public class BasicTurret extends TurretRoot {
     private static final TextureRegion TURRET_FIRE = new TextureRegion(TURRET_ASSETS, 0, 64, 134, 64);
     private static final Texture BASE = new Texture("BasicBase.png");
 
-    private static final float CENTER_X = 40f, CENTER_Y = 40f;
-
     private static final float STATIC_ORIGIN_X = 32, STATIC_ORIGIN_Y = 32;
     private static final float FIRE_ORIGIN_X = 40, FIRE_ORIGIN_Y = 32;
 
@@ -85,16 +83,6 @@ public class BasicTurret extends TurretRoot {
     }
 
     @Override
-    public float centerX() {
-        return CENTER_X;
-    }
-
-    @Override
-    public float centerY() {
-        return CENTER_Y;
-    }
-
-    @Override
     public float range() {
         return RANGE;
     }
@@ -112,5 +100,9 @@ public class BasicTurret extends TurretRoot {
     @Override
     public String name() {
         return NAME;
+    }
+
+    public static BasicTurret getInstance() {
+        return INSTANCE;
     }
 }

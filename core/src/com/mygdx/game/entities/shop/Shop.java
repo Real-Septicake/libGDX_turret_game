@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.TurretGame;
+import com.mygdx.game.World;
 import com.mygdx.game.components.TurretComponent;
 import com.mygdx.game.entities.turrets.TurretRoot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Shop {
@@ -24,6 +26,9 @@ public class Shop {
     private static final Rectangle closeButtonBounds = new Rectangle(TurretGame.WIDTH - 240, TurretGame.HEIGHT - 124, 40, 100);
     private static final Rectangle openButtonBounds = new Rectangle(TurretGame.WIDTH - 40, TurretGame.HEIGHT - 124, 40, 100);
     private static final Rectangle targetButtonBounds = new Rectangle(TurretGame.WIDTH - 100 - 27, TurretGame.HEIGHT - 120 - 15, 54, 10);
+
+    private static final ArrayList<Page> pages = new ArrayList<>();
+    private static int currentPage = 0;
 
     private static final GlyphLayout[] targeting = new GlyphLayout[] {
             new GlyphLayout(font, "First"),
@@ -39,7 +44,11 @@ public class Shop {
 
     public static Entity target = null;
 
-    static ShapeRenderer shape = new ShapeRenderer();
+    static World world;
+
+    public static void setWorld(World world) {
+        Shop.world = world;
+    }
 
     public static void open(Entity target) {
         Shop.target = target;
@@ -86,10 +95,37 @@ public class Shop {
                 float x = TurretGame.WIDTH - 100 - target.width/2;
                 float y = TurretGame.HEIGHT - 120 - layout.height/2;
                 font.draw(batch, target, x, y);
+            } else {
+                for(int i = 0; i < pages.get(currentPage).count; i++) {
+                    TurretRoot type = pages.get(currentPage).get(i);
+                    if(type == null) throw new UnknownError("How the fuck");
+                    renderTurret(batch, type, TurretGame.WIDTH - 100, TurretGame.HEIGHT - 130 - 170*i);
+                    GlyphLayout name = getTurretName(type);
+                    font.draw(batch, name, TurretGame.WIDTH - 100 - name.width/2f, TurretGame.HEIGHT - 170 - 170*i - name.height/2f);
+                    GlyphLayout price = new GlyphLayout(font, "$"+type.cost());
+                    font.draw(batch, price, TurretGame.WIDTH - 100 - price.width/2f, TurretGame.HEIGHT - 190 - 170*i - price.height/2f);
+                }
             }
         } else
             batch.draw(closedShop, TurretGame.WIDTH - 40, TurretGame.HEIGHT - 24 - 100);
         batch.end();
+    }
+
+    private static void renderTurret(SpriteBatch batch, TurretRoot turret, float x, float y) {
+        boolean drawing = batch.isDrawing();
+        boolean canAfford = World.money >= turret.cost();
+        if(!drawing)
+            batch.begin();
+        if(!canAfford)
+            batch.setColor(0.9f, 0, 0, 1f);
+        batch.draw(turret.base(), x - turret.base().getWidth()/2f, y - turret.base().getHeight()/2f);
+        batch.draw(turret.initTex(), x - turret.originX(), y - turret.originY(), turret.originX(), turret.originY(),
+                turret.initTex().getRegionWidth(), turret.initTex().getRegionHeight(),
+                1.0f, 1.0f, 90f);
+        if(!canAfford)
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        if(!drawing)
+            batch.end();
     }
 
     public static boolean handleClick(float x, float y) {
@@ -105,6 +141,20 @@ public class Shop {
                     else t.targeting = 0;
                     System.out.println(targeting[t.targeting].width);
                 }
+            } else {
+                Page page = pages.get(currentPage);
+                if(Page.firstBounds.contains(x, y) && page.count >= 1) {
+                    return buyTurret(page.first, x, y);
+                }
+                if(Page.secondBounds.contains(x, y) && page.count >= 2) {
+                    return buyTurret(page.second, x, y);
+                }
+                if(Page.thirdBounds.contains(x, y) && page.count >= 3) {
+                    return buyTurret(page.third, x, y);
+                }
+                if(Page.fourthBounds.contains(x, y) && page.count >= 4) {
+                    return buyTurret(page.fourth, x, y);
+                }
             }
         } else {
             if(openButtonBounds.contains(x, y)) {
@@ -115,14 +165,72 @@ public class Shop {
         return false;
     }
 
+    private static boolean buyTurret(TurretRoot type, float x, float y) {
+        if(World.money >= type.cost()) {
+            world.createTurret(type, x, y);
+            World.money -= type.cost();
+            close();
+            return true;
+        }
+        return false;
+    }
+
     public static void close() {
         open = false;
         target = null;
     }
 
-    static {
-        GlyphLayout t = new GlyphLayout(font, "Strong");
-        System.out.println(t.width);
-        System.out.println(t.height);
+    public static void populatePages() {
+        pages.add(new Page());
+        for(Class<? extends TurretRoot> type : TurretRoot.subclasses) {
+            if(!pages.get(pages.size()-1).add(TurretRoot.getInstance(type))) {
+                pages.add(new Page());
+                pages.get(pages.size()-1).add(TurretRoot.getInstance(type));
+            }
+        }
+    }
+
+    private static class Page {
+        public TurretRoot first, second, third, fourth;
+        public static final Rectangle
+                firstBounds = new Rectangle(1120f, 590f, 120f, 160f),
+                secondBounds = new Rectangle(1120f, 420f, 120f, 160f),
+                thirdBounds = new Rectangle(1120f, 250f, 120f, 160f),
+                fourthBounds = new Rectangle(1120f, 80f, 120f, 160f);
+        public int count = 0;
+
+        public boolean add(TurretRoot type) {
+            if(first == null) {
+                first = type;
+                count++;
+                return true;
+            }
+            if(second == null) {
+                second = type;
+                count++;
+                return true;
+            }
+            if(third == null) {
+                third = type;
+                count++;
+                return true;
+            }
+            if(fourth == null) {
+                fourth = type;
+                count++;
+                return true;
+            }
+            return false;
+        }
+
+        public TurretRoot get(int index) {
+            return switch(index) {
+                case 0 -> first;
+                case 1 -> second;
+                case 2 -> third;
+                case 3 -> fourth;
+                default -> null;
+            };
+        }
     }
 }
