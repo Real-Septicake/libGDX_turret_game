@@ -81,43 +81,51 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private class InputProcessing extends InputAdapter {
+		Entity turret = null;
+		Vector3 touch = new Vector3();
+
 		@Override
 		public boolean keyDown(int keycode) {
-			if(keycode == Input.Keys.SPACE && engine.getEntitiesFor(buyingFamily).size() == 0){
-				world.createTurret(BasicTurret.INSTANCE, 0, 0);
-				return true;
-			}
-			if(keycode == Input.Keys.E){
-				world.createEnemy(BasicEnemy.INSTANCE);
-				return true;
-			}
-			if(keycode == Input.Keys.TAB) {
-				if(Shop.open)
-					Shop.close();
-				else
-					Shop.open = true;
+			switch (keycode) {
+				case Input.Keys.SPACE -> {
+					if(getBuying() == null) {
+						world.createTurret(BasicTurret.INSTANCE, 0, 0);
+						return true;
+					}
+				}
+				case Input.Keys.E -> {
+					world.createEnemy(BasicEnemy.INSTANCE);
+					return true;
+				}
+				case Input.Keys.TAB -> {
+					if(Shop.open) Shop.close();
+					else Shop.open = true;
+					return true;
+				}
+				case Input.Keys.ESCAPE -> {
+					if((turret = getBuying()) != null) {
+						world.sellTurret(turret);
+						return true;
+					}
+				}
 			}
 			return false;
 		}
 
 		@Override
 		public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-			Vector3 touch = new Vector3(screenX, screenY, 0);
+			touch.set(screenX, screenY, 0);
 			camera.unproject(touch);
-
-			System.out.println(touch.x + ":" + touch.y);
 
 			if(Shop.handleClick(touch.x, touch.y))
 				return true;
 
-			ImmutableArray<Entity> buying = engine.getEntitiesFor(buyingFamily);
-			if (buying.size() != 0) {
-				Entity turret = buying.get(0);
+			if ((turret = getBuying()) != null) {
 				BuyingComponent buy = buyingM.get(turret);
 				if (buy.canPlace) {
 					turret.remove(BuyingComponent.class);
 					TurretComponent t = turretM.get(turret);
-					t.value = t.type.cost() / 3;
+					t.value /= 3;
 					Shop.open(turret);
 					return true;
 				}
@@ -135,6 +143,11 @@ public class GameScreen extends ScreenAdapter {
 			}
 
 			return false;
+		}
+
+		private Entity getBuying() {
+			ImmutableArray<Entity> buying = engine.getEntitiesFor(buyingFamily);
+			return buying.size() != 0 ? buying.first() : null;
 		}
 	}
 }

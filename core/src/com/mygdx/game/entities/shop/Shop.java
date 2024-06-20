@@ -148,9 +148,7 @@ public class Shop {
                     return true;
                 }
                 if(sellButtonBounds.contains(x, y)) {
-                    TurretComponent t = turretM.get(target);
-                    World.money += t.value;
-                    world.removeEntity(target);
+                    world.sellTurret(target);
                     target = null;
                     close();
                     return true;

@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.mygdx.game.components.*;
@@ -11,6 +12,8 @@ public class World {
     public static int lives;
     public static int round;
 
+    private static ComponentMapper<TurretComponent> turretM = ComponentMapper.getFor(TurretComponent.class);
+
     private final PooledEngine engine;
 
     public World(PooledEngine engine) {
@@ -21,7 +24,9 @@ public class World {
         this.engine = engine;
     }
 
-    public void removeEntity(Entity e) {
+    public void sellTurret(Entity e) {
+        TurretComponent t = turretM.get(e);
+        money += t.value;
         engine.removeEntity(e);
     }
 
@@ -51,6 +56,7 @@ public class World {
         t.range = turret.range();
         t.damage = turret.damage();
         t.act = turret.act();
+        t.value = turret.cost();
         t.type = turret;
         e.add(t);
 
