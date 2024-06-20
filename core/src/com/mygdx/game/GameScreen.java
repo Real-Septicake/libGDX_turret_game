@@ -26,6 +26,7 @@ public class GameScreen extends ScreenAdapter {
 
 	private final ComponentMapper<BuyingComponent> buyingM = ComponentMapper.getFor(BuyingComponent.class);
 	private final ComponentMapper<RectBoundsComponent> boundsM = ComponentMapper.getFor(RectBoundsComponent.class);
+	private final ComponentMapper<TurretComponent> turretM = ComponentMapper.getFor(TurretComponent.class);
 
 	private final Family buyingFamily = Family.all(BuyingComponent.class).get();
 	private final Family turretFamily = Family.all(TurretComponent.class, RectBoundsComponent.class).get();
@@ -115,6 +116,9 @@ public class GameScreen extends ScreenAdapter {
 				BuyingComponent buy = buyingM.get(turret);
 				if (buy.canPlace) {
 					turret.remove(BuyingComponent.class);
+					TurretComponent t = turretM.get(turret);
+					t.value = t.type.cost() / 3;
+					Shop.open(turret);
 					return true;
 				}
 				return false;

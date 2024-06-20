@@ -21,6 +21,10 @@ public class World {
         this.engine = engine;
     }
 
+    public void removeEntity(Entity e) {
+        engine.removeEntity(e);
+    }
+
     public void createTurret(TurretRoot turret, float x, float y) {
         Entity e = engine.createEntity();
 
