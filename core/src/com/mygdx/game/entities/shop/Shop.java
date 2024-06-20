@@ -191,9 +191,9 @@ public class Shop {
     public static void populatePages() {
         pages.add(new Page());
         for(Class<? extends TurretRoot> type : TurretRoot.subclasses) {
-            if(!pages.get(pages.size()-1).add(TurretRoot.getInstance(type))) {
+            if(!pages.getLast().add(TurretRoot.getInstance(type))) {
                 pages.add(new Page());
-                pages.get(pages.size()-1).add(TurretRoot.getInstance(type));
+                pages.getLast().add(TurretRoot.getInstance(type));
             }
         }
     }

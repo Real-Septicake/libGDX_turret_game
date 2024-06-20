@@ -12,7 +12,7 @@ public class World {
     public static int lives;
     public static int round;
 
-    private static ComponentMapper<TurretComponent> turretM = ComponentMapper.getFor(TurretComponent.class);
+    private static final ComponentMapper<TurretComponent> turretM = ComponentMapper.getFor(TurretComponent.class);
 
     private final PooledEngine engine;
 
