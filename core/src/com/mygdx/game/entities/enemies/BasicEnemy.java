@@ -42,4 +42,8 @@ public class BasicEnemy extends EnemyRoot {
     public int value() {
         return VALUE;
     }
+
+    public static BasicEnemy getInstance() {
+        return INSTANCE;
+    }
 }

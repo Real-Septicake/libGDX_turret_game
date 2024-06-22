@@ -40,10 +40,10 @@ public class Spawn {
      */
     public final float spacing;
 
-    private boolean started = false;
-    private boolean delayOver = false;
-    private int spawned = 0;
-    private float timer = 0f;
+    public boolean finished = false;
+    public boolean delayOver = false;
+    private int spawned;
+    private float timer;
 
     private Spawn(Type type, float delay, List<Spawn> next, EnemyRoot enemy, int count, float spacing) {
         this.type = type;
@@ -52,6 +52,8 @@ public class Spawn {
         this.enemy = enemy;
         this.count = count;
         this.spacing = spacing;
+        timer = 0f;
+        spawned = 0;
     }
 
     public static Spawn instant(EnemyRoot enemy, int count, float spacing, List<Spawn> next) {
@@ -77,9 +79,9 @@ public class Spawn {
     }
 
     public static class ProcessResult {
-        public boolean started;
-        public boolean delayOver;
-        public boolean finished;
+        public boolean started = false;
+        public boolean delayOver = false;
+        public boolean finished = false;
 
         protected ProcessResult() {}
     }
@@ -92,11 +94,14 @@ public class Spawn {
             result.delayOver = true;
             delayOver = true;
         }
-        if(timer - spawned * spacing >= spacing) {
+        if(!finished && timer - spawned * spacing >= spacing) {
             world.createEnemy(enemy);
             spawned++;
         }
-        if(count == spawned) result.finished = true;
+        if(count == spawned) {
+            result.finished = true;
+            finished = true;
+        }
         return result;
     }
 }

@@ -3,18 +3,38 @@ package com.mygdx.game.rounds;
 import com.mygdx.game.World;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Round {
     private final List<Spawn> spawns = new ArrayList<>();
+    private final List<Spawn> queue = new ArrayList<>();
 
     public Round(Spawn init) {
         spawns.add(init);
     }
 
     public void update(float delta, World world) {
-        for(Spawn spawn : spawns) {
-            spawn.process(world, delta);
+        Iterator<Spawn> itr = spawns.iterator();
+        Spawn spawn;
+        while (itr.hasNext()) {
+            spawn = itr.next();
+            Spawn.ProcessResult result = spawn.process(world, delta);
+            if(spawn.type == Spawn.Type.INSTANT && result.started)
+                queue.addAll(spawn.next);
+            if(spawn.type == Spawn.Type.DELAY && result.delayOver)
+                queue.addAll(spawn.next);
+            if(spawn.type == Spawn.Type.FINISH && result.finished)
+                queue.addAll(spawn.next);
+
+            if(spawn.finished && spawn.delayOver)
+                itr.remove();
         }
+        spawns.addAll(queue);
+        queue.removeIf(s -> true);
+    }
+
+    public boolean finished() {
+        return spawns.isEmpty();
     }
 }

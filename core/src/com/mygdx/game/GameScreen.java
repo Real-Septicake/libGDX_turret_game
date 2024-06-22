@@ -14,8 +14,12 @@ import com.mygdx.game.components.RectBoundsComponent;
 import com.mygdx.game.components.TurretComponent;
 import com.mygdx.game.entities.enemies.BasicEnemy;
 import com.mygdx.game.entities.shop.Shop;
+import com.mygdx.game.rounds.Round;
+import com.mygdx.game.rounds.Spawn;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.entities.turrets.BasicTurret;
+
+import java.util.List;
 
 
 public class GameScreen extends ScreenAdapter {
@@ -34,6 +38,11 @@ public class GameScreen extends ScreenAdapter {
 	public final PooledEngine engine = new PooledEngine();
 
 	public final BitmapFont font;
+
+	private Round current = new Round(Spawn.finish(BasicEnemy.INSTANCE, 6, 0.4f, List.of(
+			Spawn.instant(BasicEnemy.INSTANCE, 4, 0.15f, List.of()),
+			Spawn.instant(BasicEnemy.INSTANCE, 3, 0.1f, List.of())
+	)));
 
 	public World world;
 
@@ -67,6 +76,8 @@ public class GameScreen extends ScreenAdapter {
 		batch.draw(map, 0, 0);
 		batch.end();
 
+		if(current != null && !current.finished()) current.update(delta, world);
+
 		engine.update(delta);
 
 		renderInfoText();
@@ -95,6 +106,11 @@ public class GameScreen extends ScreenAdapter {
 				}
 				case Input.Keys.E -> {
 					world.createEnemy(BasicEnemy.INSTANCE);
+					return true;
+				}
+				case Input.Keys.V -> {
+					if(current == null || current.finished())
+						current = new Round(Spawn.instant(BasicEnemy.INSTANCE, 6, 0.4f, List.of()));
 					return true;
 				}
 				case Input.Keys.TAB -> {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.entities.enemies.EnemyRoot;
 import com.mygdx.game.entities.turrets.TurretRoot;
 
 public class TurretGame extends Game {
@@ -26,6 +27,7 @@ public class TurretGame extends Game {
         // Load and cache the turret classes
         try {
             TurretRoot.loadClasses();
+            EnemyRoot.loadClasses();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
