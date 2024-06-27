@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entities.enemies.EnemyRoot;
 import com.mygdx.game.entities.turrets.TurretRoot;
+import com.mygdx.game.rounds.Round;
+
+import java.io.FileNotFoundException;
 
 public class TurretGame extends Game {
     public static final float WIDTH = 1280, HEIGHT = 800;
@@ -29,6 +32,11 @@ public class TurretGame extends Game {
             TurretRoot.loadClasses();
             EnemyRoot.loadClasses();
         } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Round.read();
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 

@@ -26,6 +26,7 @@ public class Spawn {
      */
     public final float delay;
     public final List<Spawn> next;
+    public Spawn prev;
 
     /**
      * Type of enemy created by this spawn
@@ -42,8 +43,8 @@ public class Spawn {
 
     public boolean finished = false;
     public boolean delayOver = false;
-    private int spawned;
-    private float timer;
+    private int spawned = 0;
+    private float timer = 0;
 
     private Spawn(Type type, float delay, List<Spawn> next, EnemyRoot enemy, int count, float spacing) {
         this.type = type;
@@ -52,8 +53,14 @@ public class Spawn {
         this.enemy = enemy;
         this.count = count;
         this.spacing = spacing;
-        timer = 0f;
-        spawned = 0;
+        for(Spawn n : next) {
+            n.prev = this;
+        }
+    }
+
+    public void add(Spawn s) {
+        s.prev = this;
+        next.add(s);
     }
 
     public static Spawn instant(EnemyRoot enemy, int count, float spacing, List<Spawn> next) {
@@ -103,5 +110,16 @@ public class Spawn {
             finished = true;
         }
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Spawn{" +
+                "type=" + type.name() +
+                ", delay=" + delay +
+                ", enemy=" + enemy +
+                ", count=" + count +
+                ", spacing=" + spacing +
+                '}';
     }
 }
