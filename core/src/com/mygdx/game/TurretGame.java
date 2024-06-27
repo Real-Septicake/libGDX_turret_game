@@ -9,6 +9,7 @@ import com.mygdx.game.entities.turrets.TurretRoot;
 import com.mygdx.game.rounds.Round;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class TurretGame extends Game {
     public static final float WIDTH = 1280, HEIGHT = 800;
@@ -34,12 +35,15 @@ public class TurretGame extends Game {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
         try {
-            Round.read();
+            List<Round> rounds = Round.read();
+            System.out.println(rounds);
+            setScreen(new GameScreen(rounds));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        setScreen(new GameScreen());
+
     }
 }

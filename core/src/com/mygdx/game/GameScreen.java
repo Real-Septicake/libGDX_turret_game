@@ -38,15 +38,13 @@ public class GameScreen extends ScreenAdapter {
 	public final PooledEngine engine = new PooledEngine();
 
 	public final BitmapFont font;
+	private final List<Round> rounds;
 
-	private Round current = new Round(Spawn.finish(BasicEnemy.INSTANCE, 6, 0.4f, List.of(
-			Spawn.instant(BasicEnemy.INSTANCE, 4, 0.15f, List.of()),
-			Spawn.instant(BasicEnemy.INSTANCE, 3, 0.1f, List.of())
-	)));
+	private Round current;
 
 	public World world;
 
-	public GameScreen() {
+	public GameScreen(List<Round> rounds) {
 		Gdx.input.setInputProcessor(new InputProcessing());
 
 		map = new Texture("Map.png");
@@ -66,6 +64,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new EnemyDisposalSystem());
 
 		camera.setToOrtho(false, TurretGame.WIDTH, TurretGame.HEIGHT);
+		this.rounds = rounds;
+		current = rounds.getFirst();
 	}
 
 	@Override
