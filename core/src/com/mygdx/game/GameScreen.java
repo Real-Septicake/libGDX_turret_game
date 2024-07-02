@@ -9,13 +9,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.components.BuyingComponent;
-import com.mygdx.game.components.RectBoundsComponent;
-import com.mygdx.game.components.TurretComponent;
+import com.mygdx.game.components.*;
 import com.mygdx.game.entities.enemies.BasicEnemy;
 import com.mygdx.game.entities.shop.Shop;
 import com.mygdx.game.rounds.Round;
-import com.mygdx.game.rounds.Spawn;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.entities.turrets.BasicTurret;
 
@@ -35,13 +32,25 @@ public class GameScreen extends ScreenAdapter {
 	private final Family buyingFamily = Family.all(BuyingComponent.class).get();
 	private final Family turretFamily = Family.all(TurretComponent.class, RectBoundsComponent.class).get();
 
+	/**
+	 * Pooled engine used for the creation of entities and components
+	 */
 	public final PooledEngine engine = new PooledEngine();
 
 	public final BitmapFont font;
+	/**
+	 * List of rounds loaded from the file
+	 */
 	private final List<Round> rounds;
 
+	/**
+	 * Current round
+	 */
 	private Round current;
 
+	/**
+	 * World for this game
+	 */
 	public World world;
 
 	public GameScreen(List<Round> rounds) {
@@ -65,7 +74,6 @@ public class GameScreen extends ScreenAdapter {
 
 		camera.setToOrtho(false, TurretGame.WIDTH, TurretGame.HEIGHT);
 		this.rounds = rounds;
-		current = rounds.getFirst();
 	}
 
 	@Override
@@ -88,6 +96,7 @@ public class GameScreen extends ScreenAdapter {
 		batch.begin();
 		font.draw(batch, "Money: $" + World.money, 10, TurretGame.HEIGHT - 10);
 		font.draw(batch, "Lives: " + World.lives, 10, TurretGame.HEIGHT - 50);
+		font.draw(batch, "Round: " + Math.max(1, World.round), 10, TurretGame.HEIGHT - 90);
 		batch.end();
 	}
 
@@ -109,8 +118,8 @@ public class GameScreen extends ScreenAdapter {
 					return true;
 				}
 				case Input.Keys.V -> {
-					if(current == null || current.finished())
-						current = new Round(Spawn.instant(BasicEnemy.INSTANCE, 6, 0.4f, List.of()));
+					if(current == null || (current.finished() && engine.getEntitiesFor(Family.all(EnemyComponent.class).exclude(EnemyDisposeComponent.class).get()).size() == 0))
+						current = rounds.get(World.round++);
 					return true;
 				}
 				case Input.Keys.TAB -> {

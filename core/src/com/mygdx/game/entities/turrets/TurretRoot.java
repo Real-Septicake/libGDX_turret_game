@@ -4,19 +4,17 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.*;
-import com.mygdx.game.entities.shop.Shop;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Set;
 
 public abstract class TurretRoot {
     protected static final ComponentMapper<StateComponent> stateM = ComponentMapper.getFor(StateComponent.class);
-    public static final List<Class<? extends TurretRoot>> subclasses = new ArrayList<>();
+    public static final HashMap<String, TurretRoot> subclasses = new HashMap<>();
 
     public abstract Act act();
     public abstract TextureRegion initTex();
@@ -64,16 +62,10 @@ public abstract class TurretRoot {
         Set<Class<? extends TurretRoot>> subs = reflections.getSubTypesOf(TurretRoot.class);
         for(Class<? extends TurretRoot> clazz : subs) {
             validateTurretClass(clazz);
-            subclasses.add(clazz);
+            try {
+                Method instance = clazz.getMethod("getInstance");
+                subclasses.put(clazz.getSimpleName(), clazz.cast(instance.invoke(null)));
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
         }
-        Shop.populatePages();
-    }
-
-    public static TurretRoot getInstance(Class<? extends TurretRoot> clazz) {
-        try {
-            Method instance = clazz.getMethod("getInstance");
-            return (TurretRoot) instance.invoke(null);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
-        return null;
     }
 }

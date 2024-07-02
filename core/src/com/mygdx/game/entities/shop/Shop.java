@@ -188,13 +188,11 @@ public class Shop {
         target = null;
     }
 
-    public static void populatePages() {
-        pages.add(new Page());
-        for(Class<? extends TurretRoot> type : TurretRoot.subclasses) {
-            if(!pages.getLast().add(TurretRoot.getInstance(type))) {
-                pages.add(new Page());
-                pages.getLast().add(TurretRoot.getInstance(type));
-            }
+    public static void addTurret(TurretRoot type) {
+        if(pages.isEmpty()) pages.add(new Page());
+        if(!pages.getLast().add(type)) {
+            pages.add(new Page());
+            pages.getLast().add(type);
         }
     }
 

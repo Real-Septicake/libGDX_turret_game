@@ -25,7 +25,13 @@ public class Spawn {
      *  Time until next spawn is started
      */
     public final float delay;
+    /**
+     * The spawns to start after this
+     */
     public final List<Spawn> next;
+    /**
+     * The spawn that started this instance
+     */
     public Spawn prev;
 
     /**
@@ -41,9 +47,21 @@ public class Spawn {
      */
     public final float spacing;
 
+    /**
+     * If this instance has spawned all of its enemies
+     */
     public boolean finished = false;
+    /**
+     * If this instance's delay is over
+     */
     public boolean delayOver = false;
+    /**
+     * The number of enemies this instance has spawned
+     */
     private int spawned = 0;
+    /**
+     * The amount of time this spawn has been active
+     */
     private float timer = 0;
 
     private Spawn(Type type, float delay, List<Spawn> next, EnemyRoot enemy, int count, float spacing) {

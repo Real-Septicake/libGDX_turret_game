@@ -1,7 +1,6 @@
 package com.mygdx.game.entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.entities.turrets.TurretRoot;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -10,9 +9,18 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * The root class of all enemies
+ *
+ * @implNote All subclasses must have a public, static method named `getInstance`
+ * that returns an instance of the subclass
+ */
 public abstract class EnemyRoot {
     public static final HashMap<String, EnemyRoot> enemies = new HashMap<>();
 
+    /**
+     * @return The texture for this enemy
+     */
     public abstract Texture texture();
     public abstract float originX();
     public abstract float originY();
