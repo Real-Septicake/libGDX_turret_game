@@ -33,32 +33,28 @@ public class World {
     public void createTurret(TurretRoot turret, float x, float y) {
         Entity e = engine.createEntity();
 
-        TurretTextureComponent tex = engine.createComponent(TurretTextureComponent.class);
+        TurretTextureComponent tex = e.addAndReturn(engine.createComponent(TurretTextureComponent.class));
         tex.turretGun = turret.initTex();
         tex.turretBase = turret.base();
         tex.originX = turret.originX();
         tex.originY = turret.originY();
-        e.add(tex);
 
-        TransformComponent trans = engine.createComponent(TransformComponent.class);
+        TransformComponent trans = e.addAndReturn(engine.createComponent(TransformComponent.class));
         trans.pos.x = x;
         trans.pos.y = y;
-        e.add(trans);
 
-        RectBoundsComponent bounds = engine.createComponent(RectBoundsComponent.class);
+        RectBoundsComponent bounds = e.addAndReturn(engine.createComponent(RectBoundsComponent.class));
         bounds.bounds.x = x;
         bounds.bounds.y = y;
         bounds.bounds.width = turret.base().getWidth();
         bounds.bounds.height = turret.base().getHeight();
-        e.add(bounds);
 
-        TurretComponent t = engine.createComponent(TurretComponent.class);
+        TurretComponent t = e.addAndReturn(engine.createComponent(TurretComponent.class));
         t.range = turret.range();
         t.damage = turret.damage();
         t.act = turret.act();
         t.value = turret.cost();
         t.type = turret;
-        e.add(t);
 
         e.add(engine.createComponent(BuyingComponent.class));
         e.add(engine.createComponent(StateComponent.class));
@@ -69,19 +65,17 @@ public class World {
     public void createEnemy(EnemyRoot enemy) {
         Entity e = engine.createEntity();
 
-        EnemyTextureComponent textureComp = engine.createComponent(EnemyTextureComponent.class);
+        EnemyTextureComponent textureComp = e.addAndReturn(engine.createComponent(EnemyTextureComponent.class));
         textureComp.texture = enemy.texture();
         textureComp.originX = enemy.originX();
         textureComp.originY = enemy.originY();
-        e.add(textureComp);
 
-        EnemyComponent enemyComp = engine.createComponent(EnemyComponent.class);
+        EnemyComponent enemyComp = e.addAndReturn(engine.createComponent(EnemyComponent.class));
         enemyComp.current = 0.0f;
         enemyComp.speed = enemy.speed();
         enemyComp.maxHealth = enemy.maxHealth();
         enemyComp.health = enemy.maxHealth();
         enemyComp.value = enemy.value();
-        e.add(enemyComp);
 
         e.add(engine.createComponent(TransformComponent.class));
         engine.addEntity(e);
