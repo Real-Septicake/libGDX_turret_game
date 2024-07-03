@@ -83,7 +83,7 @@ public class TurretGame extends Game {
                         Shop.addTurret(t);
                     } else {
                         int tabs = countTab(line);
-                        line = line.substring(tabs * (line.charAt(0) == ' ' ? 4 : 1));
+                        line = line.trim();
                         int diff = tabs - lastTabCount - 1;
                         lastTabCount = tabs;
                         String[] frags = line.split(" ");
