@@ -12,19 +12,52 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * The root class of all turrets
+ *
+ * @implSpec All subclasses must have a public, static method named `getInstance`
+ * that returns an instance of the subclass
+ */
 public abstract class TurretRoot {
     protected static final ComponentMapper<StateComponent> stateM = ComponentMapper.getFor(StateComponent.class);
     public static final HashMap<String, TurretRoot> subclasses = new HashMap<>();
 
+    /**
+     * @return The default act of this turret type
+     */
     public abstract Act act();
+    /**
+     * @return The initial texture of the gun of this turret type
+     */
     public abstract TextureRegion initTex();
+    /**
+     * @return The texture of the base of this turret type
+     */
     public abstract Texture base();
+    /**
+     * @return The x coordinate of the origin of this turret type's initial gun texture
+     */
     public abstract float originX();
+    /**
+     * @return The y coordinate of the origin of this turret type's initial gun texture
+     */
     public abstract float originY();
+    /**
+     * @return The radius of this turret type's range in pixels
+     */
     public abstract float range();
+    /**
+     * @return The damage done by this turret type
+     */
     public abstract float damage();
 
+    /**
+     * @return The cost to buy this turret type from the store
+     */
     public abstract int cost();
+    /**
+     * @return The name displayed for this turret type in the store
+     */
     public abstract String name();
 
     private static void validateTurretClass(Class<? extends TurretRoot> c) {

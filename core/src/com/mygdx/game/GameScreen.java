@@ -150,7 +150,7 @@ public class GameScreen extends ScreenAdapter {
 				if (buy.canPlace) {
 					turret.remove(BuyingComponent.class);
 					TurretComponent t = turretM.get(turret);
-					t.value /= 3;
+					t.value /= TurretGame.VALUE_DIVIDEND;
 					Shop.open(turret);
 					return true;
 				}

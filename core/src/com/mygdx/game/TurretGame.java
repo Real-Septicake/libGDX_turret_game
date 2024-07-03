@@ -24,6 +24,8 @@ public class TurretGame extends Game {
     public static final Vector2[] points = new Vector2[resolution];
     public static CatmullRomSpline<Vector2> spline;
 
+    public static final int VALUE_DIVIDEND = 3;
+
     @Override
     public void create() {
         // Generate path

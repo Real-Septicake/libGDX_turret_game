@@ -12,20 +12,35 @@ import java.util.Set;
 /**
  * The root class of all enemies
  *
- * @implNote All subclasses must have a public, static method named `getInstance`
+ * @implSpec All subclasses must have a public, static method named `getInstance`
  * that returns an instance of the subclass
  */
 public abstract class EnemyRoot {
     public static final HashMap<String, EnemyRoot> enemies = new HashMap<>();
 
     /**
-     * @return The texture for this enemy
+     * @return The texture for this enemy type
      */
     public abstract Texture texture();
+    /**
+     * @return The x coordinate of the origin this enemy type's texture
+     */
     public abstract float originX();
+    /**
+     * @return The y coordinate of the origin this enemy type's texture
+     */
     public abstract float originY();
+    /**
+     * @return The speed of this enemy type
+     */
     public abstract float speed();
+    /**
+     * @return The maximum health of this enemy type
+     */
     public abstract int maxHealth();
+    /**
+     * @return The amount of cash gained from killing this enemy type
+     */
     public abstract int value();
 
     private static void validateClass(Class<? extends EnemyRoot> clazz) {

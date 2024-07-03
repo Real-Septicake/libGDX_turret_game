@@ -11,18 +11,20 @@ public final class TurretUtils {
     private static final ComponentMapper<TransformComponent> transM = ComponentMapper.getFor(TransformComponent.class);
     private static final ComponentMapper<TurretTextureComponent> turretTexM = ComponentMapper.getFor(TurretTextureComponent.class);
 
+    private static final Family TRANS = Family.all(TransformComponent.class).get();
     private static final Family TURRETS = Family.all(TurretTextureComponent.class, TransformComponent.class, TurretComponent.class).get();
 
     public static void rotateTowards(Entity entity, Entity target) {
-        if(!TURRETS.matches(entity))
-            throw new IllegalArgumentException("Cannot rotate a non-turret entity");
+        if(!TRANS.matches(entity))
+            throw new IllegalArgumentException("Cannot rotate an entity without a transform component");
+        if(!TRANS.matches(target))
+            throw new IllegalArgumentException("Cannot rotate towards an entity without a transform component");
 
-        TurretTextureComponent tex = turretTexM.get(entity);
         TransformComponent trans = transM.get(entity);
 
         TransformComponent pos = transM.get(target);
 
-        float a = MathUtils.radiansToDegrees * MathUtils.atan2(pos.pos.y - (trans.pos.y + tex.originX), pos.pos.x - (trans.pos.x + tex.originX));
+        float a = MathUtils.radiansToDegrees * MathUtils.atan2(pos.pos.y - trans.pos.y, pos.pos.x - trans.pos.x);
         trans.rotation = a < 0 ? a + 360 : a;
     }
 

@@ -64,6 +64,7 @@ public class Shop {
         t.damage = upgrade.damage;
         if(upgrade.newAct != null)
             t.act = upgrade.newAct;
+        t.value += upgrade.cost / TurretGame.VALUE_DIVIDEND;
     }
 
     public static GlyphLayout getTurretName(TurretRoot turret) {
