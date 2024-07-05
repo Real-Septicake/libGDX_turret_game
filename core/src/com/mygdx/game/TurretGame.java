@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entities.enemies.EnemyRoot;
-import com.mygdx.game.entities.shop.Shop;
+import com.mygdx.game.shop.Shop;
 import com.mygdx.game.entities.turrets.TurretRoot;
 import com.mygdx.game.rounds.Round;
 import com.mygdx.game.rounds.Spawn;

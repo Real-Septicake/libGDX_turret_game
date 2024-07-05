@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.shop;
+package com.mygdx.game.shop;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;

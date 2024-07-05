@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.shop;
+package com.mygdx.game.shop;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.entities.turrets.Act;

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.components.*;
 import com.mygdx.game.entities.enemies.BasicEnemy;
-import com.mygdx.game.entities.shop.Shop;
+import com.mygdx.game.shop.Shop;
 import com.mygdx.game.rounds.Round;
 import com.mygdx.game.systems.*;
 import com.mygdx.game.entities.turrets.BasicTurret;
