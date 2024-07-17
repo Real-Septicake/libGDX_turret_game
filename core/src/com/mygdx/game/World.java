@@ -62,7 +62,7 @@ public class World {
         engine.addEntity(e);
     }
 
-    public void createEnemy(EnemyRoot enemy) {
+    public void createEnemy(EnemyRoot enemy, float progress) {
         Entity e = engine.createEntity();
 
         EnemyTextureComponent textureComp = e.addAndReturn(engine.createComponent(EnemyTextureComponent.class));
@@ -71,11 +71,12 @@ public class World {
         textureComp.originY = enemy.originY();
 
         EnemyComponent enemyComp = e.addAndReturn(engine.createComponent(EnemyComponent.class));
-        enemyComp.current = 0.0f;
+        enemyComp.current = Math.max(0.0f, progress);
         enemyComp.speed = enemy.speed();
         enemyComp.maxHealth = enemy.maxHealth();
         enemyComp.health = enemy.maxHealth();
         enemyComp.value = enemy.value();
+        enemyComp.listener = enemy.listener();
 
         e.add(engine.createComponent(TransformComponent.class));
         engine.addEntity(e);

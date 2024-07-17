@@ -1,6 +1,7 @@
 package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.mygdx.game.entities.enemies.EnemyListener;
 
 public class EnemyComponent implements Component {
     public float speed;
@@ -10,4 +11,6 @@ public class EnemyComponent implements Component {
     public float health;
 
     public int value;
+
+    public EnemyListener listener;
 }

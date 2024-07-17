@@ -11,12 +11,14 @@ import com.mygdx.game.components.EnemyDisposeComponent;
 
 public class EnemyDisposalSystem extends IteratingSystem {
     Engine engine;
+    private final World world;
 
     private static final ComponentMapper<EnemyComponent> enemyM = ComponentMapper.getFor(EnemyComponent.class);
     private static final ComponentMapper<EnemyDisposeComponent> disposeM = ComponentMapper.getFor(EnemyDisposeComponent.class);
 
-    public EnemyDisposalSystem() {
+    public EnemyDisposalSystem(World world) {
         super(Family.all(EnemyComponent.class, EnemyDisposeComponent.class).get());
+        this.world = world;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class EnemyDisposalSystem extends IteratingSystem {
             engine.removeEntity(entity);
         } else if(dispose.state == EnemyDisposeComponent.KILL) {
             World.money += enemy.value;
+            enemy.listener.onDeath(world, enemy.current);
             engine.removeEntity(entity);
         }
     }

@@ -120,7 +120,7 @@ public class Spawn {
             delayOver = true;
         }
         if(!finished && timer - spawned * spacing >= spacing) {
-            world.createEnemy(enemy);
+            world.createEnemy(enemy, 0.0f);
             spawned++;
         }
         if(count == spawned) {

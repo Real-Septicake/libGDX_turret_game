@@ -43,6 +43,11 @@ public abstract class EnemyRoot {
      */
     public abstract int value();
 
+    /**
+     * @return The enemy listener used by this enemy type
+     */
+    public abstract EnemyListener listener();
+
     private static void validateClass(Class<? extends EnemyRoot> clazz) {
         try {
             Method m = clazz.getMethod("getInstance");

@@ -53,6 +53,7 @@ public final class TurretUtils {
         EnemyComponent enemy = enemyM.get(target);
 
         enemy.health -= damage;
+        enemy.listener.onDamage(damage);
         if(enemy.health <= 0) {
             EnemyDisposeComponent dispose = new EnemyDisposeComponent();
             dispose.state = EnemyDisposeComponent.KILL;

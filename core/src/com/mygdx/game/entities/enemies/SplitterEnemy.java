@@ -1,18 +1,17 @@
 package com.mygdx.game.entities.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.RandomXS128;
 import com.mygdx.game.World;
 
-public class BasicEnemy extends EnemyRoot {
+public class SplitterEnemy extends EnemyRoot {
     private static final Texture TEXTURE = new Texture("BasicEnemy.png");
     private static final float ORIGIN_X = 24, ORIGIN_Y = 24;
-    private static final float SPEED = 300f;
-    private static final int HEALTH = 5;
+    private static final float SPEED = 400f;
+    private static final int HEALTH = 2;
     private static final int VALUE = 3;
 
-    public static final BasicEnemy INSTANCE = new BasicEnemy();
-
-    public static final EnemyListener LISTENER = new EnemyListener() {
+    private static final EnemyListener LISTENER = new EnemyListener() {
         @Override
         public void onDamage(float damage) {
 
@@ -20,11 +19,16 @@ public class BasicEnemy extends EnemyRoot {
 
         @Override
         public void onDeath(World world, float progress) {
-
+            RandomXS128 ran = new RandomXS128();
+            for(int i = 0; i < 3; i++) {
+                world.createEnemy(BasicEnemy.INSTANCE, progress - ran.nextFloat(0, 0.01f));
+            }
         }
     };
 
-    private BasicEnemy() {}
+    public static final SplitterEnemy INSTANCE = new SplitterEnemy();
+
+    private SplitterEnemy() {}
 
     @Override
     public Texture texture() {
@@ -61,7 +65,7 @@ public class BasicEnemy extends EnemyRoot {
         return LISTENER;
     }
 
-    public static BasicEnemy getInstance() {
+    public static SplitterEnemy getInstance() {
         return INSTANCE;
     }
 }

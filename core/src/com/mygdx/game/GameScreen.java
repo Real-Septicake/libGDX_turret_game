@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.components.*;
 import com.mygdx.game.entities.enemies.BasicEnemy;
+import com.mygdx.game.entities.turrets.DevTurret;
 import com.mygdx.game.shop.Shop;
 import com.mygdx.game.rounds.Round;
 import com.mygdx.game.systems.*;
@@ -70,7 +71,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new TurretSystem(camera));
 		engine.addSystem(new TurretRenderingSystem(batch));
 		engine.addSystem(new EnemyRenderingSystem(batch));
-		engine.addSystem(new EnemyDisposalSystem());
+		engine.addSystem(new EnemyDisposalSystem(world));
 
 		camera.setToOrtho(false, TurretGame.WIDTH, TurretGame.HEIGHT);
 		this.rounds = rounds;
@@ -109,12 +110,12 @@ public class GameScreen extends ScreenAdapter {
 			switch (keycode) {
 				case Input.Keys.SPACE -> {
 					if(getBuying() == null) {
-						world.createTurret(BasicTurret.INSTANCE, 0, 0);
+						world.createTurret(DevTurret.INSTANCE, 0, 0);
 						return true;
 					}
 				}
 				case Input.Keys.E -> {
-					world.createEnemy(BasicEnemy.INSTANCE);
+					world.createEnemy(BasicEnemy.INSTANCE, 0.0f);
 					return true;
 				}
 				case Input.Keys.V -> {
