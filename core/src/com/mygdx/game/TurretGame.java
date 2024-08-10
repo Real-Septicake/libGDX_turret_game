@@ -35,7 +35,7 @@ public class TurretGame extends Game {
             spline.valueAt(points[i], ((float)i)/((float)resolution-1));
         }
 
-        // Load and cache the turret classes
+        // Load and cache the turret and enemy classes
         try {
             TurretRoot.loadClasses();
             EnemyRoot.loadClasses();
@@ -58,6 +58,8 @@ public class TurretGame extends Game {
             TURRETS
         }
 
+        boolean error = false;
+
         State state = null;
         int currentLine = 0;
         int lastTabCount = 0;
@@ -78,9 +80,10 @@ public class TurretGame extends Game {
                 else if (state != null) {
                     if(state == State.TURRETS) {
                         TurretRoot t = TurretRoot.subclasses.get(line.trim());
-                        if(t == null)
-                            throw new RuntimeException("Line: " + currentLine + " : Turret type \"" + line.trim() + "\" does not exist");
-                        Shop.addTurret(t);
+                        if(t == null) {
+                            System.err.println("Line: " + currentLine + " : Turret type \"" + line.trim() + "\" does not exist");
+                            error = true;
+                        } else Shop.addTurret(t);
                     } else {
                         int tabs = countTab(line);
                         line = line.trim();
@@ -88,9 +91,11 @@ public class TurretGame extends Game {
                         lastTabCount = tabs;
                         String[] frags = line.split(" ");
                         EnemyRoot type = EnemyRoot.enemies.get(frags[1]);
-                        if (type == null)
-                            throw new RuntimeException("Line: " + currentLine + " : Enemy type \"" + frags[1] + "\" does not exist");
-                        Spawn next;
+                        if (type == null) {
+                            System.err.println("Line: " + currentLine + " : Enemy type \"" + frags[1] + "\" does not exist");
+                            error = true;
+                        }
+                        Spawn next = null;
                         switch (frags[0]) {
                             case "i" -> {
                                 if (frags.length != 4)
@@ -107,34 +112,40 @@ public class TurretGame extends Game {
                                     throw new RuntimeException("Found " + frags.length + " arguments for type Finish on line " + currentLine + ", expected 4");
                                 next = Spawn.finish(type, Integer.parseInt(frags[2]), Float.parseFloat(frags[3]), new ArrayList<>());
                             }
-                            default ->
-                                    throw new RuntimeException("Line: " + currentLine + " : Unexpected spawn type: " + frags[0]);
-                        }
-                        if (tabs == 0) {
-                            if (current != null) {
-                                while (current.prev != null) current = current.prev;
-                                rounds.add(new Round(current));
+                            default -> {
+                                System.err.println("Line: " + currentLine + " : Unexpected spawn type: " + frags[0]);
+                                error = true;
                             }
-                        } else {
-                            if (diff <= 0) {
-                                while (diff++ < 0) {
-                                    if (current == null)
-                                        throw new RuntimeException("Mismatched spawn at line " + currentLine);
-                                    current = current.prev;
+                        }
+                        if(!error){
+                            if (tabs == 0) {
+                                if (current != null) {
+                                    while (current.prev != null) current = current.prev;
+                                    rounds.add(new Round(current));
                                 }
+                            } else {
+                                if (diff <= 0) {
+                                    while (diff++ < 0) {
+                                        if (current == null)
+                                            throw new RuntimeException("Mismatched spawn at line " + currentLine);
+                                        current = current.prev;
+                                    }
+                                }
+                                if (current == null)
+                                    throw new RuntimeException("Mismatched spawn at line " + currentLine);
+                                current.add(next);
                             }
-                            if (current == null)
-                                throw new RuntimeException("Mismatched spawn at line " + currentLine);
-                            current.add(next);
+                            current = next;
                         }
-                        current = next;
                     }
                 }
             }
         } catch (NumberFormatException e) {
             throw new RuntimeException("Number format error on line " + currentLine, e);
         }
-        if(current != null) {
+        if(error) {
+            System.exit(64);
+        } else if(current != null) {
             while (current.prev != null) current = current.prev;
             rounds.add(new Round(current));
         }
